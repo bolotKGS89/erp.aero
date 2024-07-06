@@ -26,7 +26,7 @@ app.get('/logout', async (req, res) => {
     const { refreshTokens } = req.body;
 
     // Blacklist the access token
-    await db.TokenBlacklist.create({ accessToken });
+    await db.TokenBlackList.create({ token: accessToken });
   
     // Remove the refresh token from the user's list
     const user = await db.User.findOne({ where: { refreshTokens } });
