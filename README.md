@@ -14,4 +14,4 @@ To run this project you need to Node version 19 installed and PostgreSQL
 * db models are in models directory
 
 ## Important notes
-Each time you log out, tokens are invalidated. The tokens are different from previous tokens. Blacklist the specific token used for logout to avoid for multiple user to continue the session.
+Each time you log out, tokens are invalidated. The tokens are different from previous tokens. Blacklist the specific token and device id are used to function regardless of one device.
