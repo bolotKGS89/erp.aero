@@ -4,8 +4,8 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const db = require('./models');
 const authenticateToken = require('./middleware/authmiddleware')
-const fileRoutes = require('./routes/fileRoutes'); // Import file routes
-const signinRoutes = require('./routes/signinRoutes'); // Import file routes
+const fileController = require('./controller/fileController'); // Import file routes
+const signinController = require('./controller/signinController'); // Import file routes
 
 const app = express();
 app.use(bodyParser.json());
@@ -17,16 +17,19 @@ app.use(cors({
   }));
 
 
-app.use('/file', fileRoutes); // Use file routes
+app.use('/file', fileController); // Use file routes
 
-app.use('/signin', signinRoutes) // Use signin routes
+app.use('/signin', signinController) // Use signin routes
 
 app.get('/logout', async (req, res) => {
     const accessToken = req.headers['authorization'];
     const { refreshTokens } = req.body;
 
+
+    const jwtUser = jwt.verify(accessToken, config.secretKey);
+
     // Blacklist the access token
-    await db.TokenBlackList.create({ token: accessToken });
+    await db.TokenBlackList.create({ token: accessToken, deviceId: jwtUser.deviceId });
   
     // Remove the refresh token from the user's list
     const user = await db.User.findOne({ where: { refreshTokens } });

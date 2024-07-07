@@ -1,21 +1,27 @@
 const jwt = require('jsonwebtoken');
 const db = require('../models');
+const config = require('../config/config.json')['development']
 
-const secretKey = '12345'// secret key for access token
 // Middleware to authenticate 
 const authenticateToken = async (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader;
     if (token == null) return res.sendStatus(401);
-  
+
+    const user = jwt.verify(token, config.secretKey);
+
     // Check if the token is in the blacklist
-    const blacklistedToken = await db.TokenBlackList.findOne({ where: { token } });
+    const blacklistedToken = await db.TokenBlackList.findOne({ where: { 
+      token: token,
+      deviceId: user.deviceId
+    } });
     if (blacklistedToken) {
       return res.sendStatus(403); // If the token is blacklisted, return Forbidden
     }
-  
-    jwt.verify(token, secretKey, (err, user) => {
+
+    jwt.verify(token, config.secretKey, (err, user) => {
       if (err) return res.sendStatus(403);
+      
       req.user = user;
       next();
     });

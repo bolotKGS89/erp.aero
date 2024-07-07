@@ -4,6 +4,8 @@
     "password": "1234",
     "database": "postgres",
     "host": "127.0.0.1",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "secretKey": "12345",
+    "refreshTokenSecret": "54321"
   }
 }

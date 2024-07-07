@@ -3,6 +3,10 @@ module.exports = (sequelize, DataTypes) => {
         token: {
             type: DataTypes.STRING,
             allowNull: false,
+        },
+        deviceId: {
+            type: DataTypes.STRING,
+            allowNull: false,
         }
         });
 
